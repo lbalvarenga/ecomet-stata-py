@@ -20,6 +20,8 @@ python3 -m pip install -r requirements.txt
 python3 unify.py > csv/output.csv
 ```
 
+`analysis.do` contém o a rotina Stata (17 MP) que realiza as análises econométricas sobre as bases de dados.
+
 ## Objetivo Geral
 
 Determinar correlação entre fabricação de produtos de fumo e nível de emprego na área de informação, finanças e administração.
@@ -55,3 +57,4 @@ Em outras palavras: pessoal de TI e economia fuma muito para trabalhar?
 - **Unidade:** Pessoa (mil)
 - **Comentário:** Pessoas que, na semana de referência, trabalharam pelo menos uma hora completa em trabalho remunerado em dinheiro, produtos, mercadorias ou benefícios (moradia, alimentação, roupas, treinamento etc.), ou em trabalho sem remuneração direta em ajuda à atividade econômica de membro do domicílio ou parente que reside em outro domicílio, ou, ainda, as que tinham trabalho remunerado do qual estavam temporariamente afastadas nessa semana. Consideram-se como ocupadas temporariamente afastadas de trabalho remunerado as pessoas que não trabalharam durante pelo menos uma hora completa na semana de referência por motivo de férias, folga, jornada variável ou licença remunerada (em decorrência de maternidade, paternidade, saúde ou acidente da própria pessoa, estudo, casamento, licença-prêmio etc.). Além disso, também foram consideradas ocupadas as pessoas afastadas por motivo diferente dos já citados, desde que o período transcorrido do afastamento fosse inferior a quatro meses, contados até o último dia da semana de referência. As informações dos indicadores são divulgados a cada mês referentes ao último trimestre móvel. Mais informações: Notas metodológicas - PNAD Contínua e Glossário - PNAD Contínua - mensal.
 - **Atualizado em:** 28/03/2024
+
