@@ -1,60 +1,136 @@
-<!-- by Lucas Alvarenga, with data from http://www.ipeadata.gov.br/ -->
+<!-- https://uclspp.github.io/PUBL0050/5-panel-data-and-difference-in-differences.html#seminar-4 -->
+<!-- https://www.youtube.com/watch?v=BdXrFf2i2d4 -->
 
 # Trabalho Acadêmico - Tópicos Avançados em Econometria
 
-```plaintext
-                   (  )/
-                    )(/
- ________________  ( /)
-()__)____________)))))    hjw
+## Sobre
 
-Art by Hayley Jane Wakenshaw
-```
+Em 1º de abril de 1992, o salário mínimo em Nova Jersey foi aumentado de US$ 4,25 para US$ 5,05. No estado vizinho da Pensilvânia, porém, o salário mínimo permaneceu constante em US$ 4,25. [David Card e Alan Krueger (1994)](doc/njmin-aer.pdf) analisaram o impacto do aumento do salário mínimo no emprego na indústria de fast-food, uma vez que este é um setor que emprega muitos trabalhadores com baixos salários.
 
-`unify.py` unifica as bases em um único arquivo para facilitar a análise em softwares estatísticos. Para utilizar:
+Os autores coletaram dados sobre o número de funcionários de 331 restaurantes fast-food em Nova Jersey e 79 na Pensilvânia. O inquérito foi realizado em Fevereiro de 1992 (antes do aumento do salário mínimo) e em Novembro de 1992 (depois do aumento do salário mínimo).
+
+## Variáveis e Transformações
+
+Variáveis originais de interesse:
+
+12. `nj` – variável dummy igual a 1 se o restaurante estiver localizado em Nova Jersey
+13. `emptot` – o número total de pessoas empregadas no período pré-tratamento
+14. `emptot2` – o número total de pessoas empregadas no período pós-tratamento
+15. `wage_st` – variável que mede o salário inicial médio no restaurante no período pré-tratamento
+16. `wage_st2` – variável que mede o salário médio inicial no restaurante no período pós-tratamento
+17. `pmeal` – variável que mede o preço médio de uma refeição no período pré-tratamento
+18. `pmeal2` – variável que mede o preço médio de uma refeição no período pós-tratamento
+19. `co_owned` – variável dummy igual a 1 se o restaurante tivesse co-proprietário
+20. `bk` – variável dummy igual a 1 se o restaurante fosse um Burger King
+21. `kfc` – variável dummy igual a 1 se o restaurante fosse um KFC
+22. `wendys` – variável dummy igual a 1 se o restaurante fosse um Wendys
+23. `roys` - variável dummy igual a 1 se o restaurante fosse um Roys
+
+Após transformação:
+
+1. `rest` - identificador do restaurante
+2. `wagelaw` - uma variável dummy igual a 1 se o restaurante estiver em um local com possibilidade de lei de salário mínimo
+3. `after` - uma variável dummy igual a 1 se a lei de salário mínimo está em vigor
+4. `branch` - qual a rede de restaurantes em questão (bk, kfc, roys, wendys)
+5. `pmeal` - variável que mede o preço médio de uma refeição
+6. `wage_st` - variável que mede o salário médio no restaurante
+7. `emptot` - o número total de pessoas empregadas
+8. `co_owned` - uma variável dummy igual a 1 se o restaurante tivesse co-proprietário
+
+As variáveis foram transformadas para facilitar a análise. A rotina [transform.py](transform.py) concatenou as observações dos estados que implementaram e não implementaram a política de salário mínimo antes e depois desta entrar em vigor.
+
+## Resultados
+
+Ao passo que os dados trazem informações de alterações de políticas ao longo do tempo (similar a um tratamento médico com um grupo de controle), o modelo escolhido foi o _Difference in Difference_ (DiD).
+
+![Difference in Difference](doc/did.png)
+Fonte: https://medium.com/bukalapak-data/difference-in-differences-8c925e691fff
+
+Foram realizadas 3 análises sob óticas diferentes, onde a variável dependente alternou entre: nível médio de salários, número de empregados por restaurante e preço médio das refeições.
+
+A primeira (ótica de salários) é útil para validar a fonte de dados, uma vez que, invariavelmente, a instauração da lei de salário mínimo aumentou os salários em Nova Jersey.
+
+A segunda é interessante para determinar se uma política de salário mínimo pode trazer impacto sobre o número de trabalhadores por restaurante.
+
+A terceira nos permite descobrir se os preços das refeições sofrem alteração com uma política de salário mínimo.
+
+---
+
+### Salários
+
+![Saída 1](doc/stata/bg/t_did_wage.png)
+Fonte: elaborada pelo autor.
+
+Como $|t| \gt P $, aceita-se a hipótese que a lei de salário mínimo alterou os salários em Nova Jersey. O coeficiente positivo indica que a relação entre a política de salário minimo e remuneração é positiva, ou seja, a política eleva o salário.
+
+> O que esta análise sugere sobre a eficácia da política de salário mínimo?
+
+Os salários iniciais médios são claramente muito semelhantes em Nova Jersey e na Pensilvânia antes da mudança no salário mínimo de Nova Jersey. A diferença nas médias pré-tratamento é de cerca de 2 centavos:
+
+![Diferença de Salários Antes do Tratamento](doc/stata/bg/t_diff_wage_before.png)
+Fonte: elaborada pelo autor.
+
+Por outro lado, a diferença nas médias pós-tratamento é de quase 50 centavos. Isto sugere que o aumento do salário mínimo foi adotado com sucesso na maioria dos restaurantes de NJ:
+
+![Diferença de Salários Após Tratamento](doc/stata/bg/t_diff_wage_after.png)
+Fonte: elaborada pelo autor.
+
+---
+
+### Número de Empregados
+
+Como $|t| \gt P $, aceita-se a hipótese que a lei de salário mínimo alterou o número de empregados por restaurante em Nova Jersey.
+
+![Saída 2](doc/stata/bg/t_did_emptot.png)
+Fonte: elaborada pelo autor.
+
+A diferença nas médias antes do tratamento mostra que os restaurantes de Nova Jersey eram inicialmente significativamente menores em termos de funcionários em tempo integral empregados do que os restaurantes da Pensilvânia:
+
+![Diferença de Empregos Antes do Tratamento](doc/stata/bg/t_diff_emptot_before.png)
+Fonte: elaborada pelo autor.
+
+O cálculo do período pós-tratamento sugere que essa diferença nas taxas de emprego entre as lojas de NJ e PA havia desaparecido após a aplicação do tratamento:
+
+![Diferença de Empregos Após Tratamento](doc/stata/bg/t_diff_emptot_after.png)
+Fonte: elaborada pelo autor.
+
+Consequentemente, a diferença nas diferenças (ou seja, a diferença nas mudanças no emprego) é positiva e indica que as lojas de NJ tiveram um aumento relativo no emprego em comparação com as lojas PA.
+
+É claro que a suposição crucial de identificação é que os restaurantes de NJ e PA teriam seguido tendências paralelas de emprego na ausência da mudança do salário mínimo. Esta suposição é muito difícil de avaliar com os dados que temos, uma vez que não há qualquer informação sobre os resultados do emprego em períodos anteriores.
+
+---
+
+### Preço das Refeições
+
+> Os restaurantes que foram sujeitos a um aumento salarial aumentam os preços do fast-food?
+
+A estimativa da diferença em diferenças sugere que existe um aumento muito pequeno (cerca de 8 centavos) no preço médio de uma refeição após a introdução do novo salário mínimo em NJ. Não parece que os custos do aumento do salário mínimo tenham sido repercutidos nos consumidores.
+
+![Saída 3](doc/stata/bg/t_did_pmeal.png)
+Fonte: elaborada pelo autor.
+
+Para essa análise, também foi possível montar o gráfico de tendências paralelas para o modelo:
+
+![Gráfico 1](doc/stata/bg/g_pt_pmeal.png)
+Fonte: elaborada pelo autor.
+
+---
+
+### Conclusão
+
+TODO: elaborar conclusão. Olhar para as análises acima e mencionar que seria interessante explorar futuramente discrepâncias entre as redes (Burger King seguiu a política igual ao Wendys?).
+
+---
+
+## Execução
+
+`transform.py` transforma a base original para facilitar a análise em softwares estatísticos. Para utilizar:
 
 ```sh
 python3 -m venv venv
 source venv/bin/activate
 python3 -m pip install -r requirements.txt
-python3 unify.py > csv/output.csv
+python3 transform.py > csv/output.csv
 ```
 
-`analysis.do` contém o a rotina Stata (17 MP) que realiza as análises econométricas sobre as bases de dados.
-
-## Objetivo Geral
-
-Determinar correlação entre fabricação de produtos de fumo e nível de emprego na área de informação, finanças e administração.
-
-Em outras palavras: pessoal de TI e economia fuma muito para trabalhar?
-
-## fumo.csv
-
-### Produção industrial - fabricação de produtos de fumo: índice de quantum (média 2022 = 100)
-
-- **Frequência:** Mensal de 2002.01 até 2024.02
-- **Fonte:** Instituto Brasileiro de Geografia e Estatística, Pesquisa Industrial Mensal - Produção Física (IBGE/PIM-PF)
-- **Unidade:** -
-- **Comentário:** A produção industrial da fabricação de fumo considera a fabricação de cigarros, cigarrilhas e outros derivados do fumo, além do fumo processado industrialmente (destalamento e outros beneficiamentos elaborados em unidades industriais) e a fabricação de filtros para cigarros. Esta classificação não compreende o cultivo do fumo, bem como o beneficiamento inicial. A base foi fixada como a média das observações no ano de 2022. Notas: A Pesquisa Industrial Mensal Produção Física têm por objetivo acompanhar a evolução do produto real da indústria no curto prazo, sendo necessário o levantamento de informações de volume físico de produtos selecionados e representativos de diferentes atividades industriais, como das indústrias extrativas e de transformação. A pesquisa vêm sendo feita desde 1970, com informações fornecidas todos os meses, até o dia 10 de cada mês posterior ao de referência. A partir de maio de 2014, a Pesquisa Industrial Mensal Produção Física, sofre reformulação e dá-se início a divulgação da nova série de índices mensais da produção industrial, com base nas novas classificações, de atividades e produtos, usadas pelas demais pesquisas da indústria a partir de 2007, quais sejam: a Classificação Nacional de Atividades Econômicas - CNAE 2.0 e a Lista de Produtos da Indústria - PRODLIST-Indústria. Segundo a classificação da CNAE 2.0, a Produção Industrial só identifica os serviços industriais mais importantes e somente quando são exercidos sob contrato. Em 2023, a pesquisa teve uma nova atualização e que foi feita a partir do cadastro de empresas e produtos produzidos pela Pesquisa Industrial Anual (PIA-Empresa e PIA-Produto) de 2019. Nesse processo, atualiza-se o ano base da pesquisa, a cesta de produtos investigados e a estrutura de ponderação. Mais informações: CNAE 2.0 ; Lista de Produtos da Indústria e Dicionário Brasileiro de Estatística.
-- **Atualizado em:** 03/04/2024
-
-## fumo_d.csv
-
-### Produção industrial - fabricação de produtos de fumo: índice de quantum dessazonalizado(média 2022 = 100)
-
-- **Frequência:** Mensal de 2002.01 até 2024.02
-- **Fonte:** Instituto Brasileiro de Geografia e Estatística, Pesquisa Industrial Mensal - Produção Física (IBGE/PIM-PF)
-- **Unidade:** -
-- **Comentário:** A produção industrial da fabricação de fumo considera a fabricação de cigarros, cigarrilhas e outros derivados do fumo, além do fumo processado industrialmente (destalamento e outros beneficiamentos elaborados em unidades industriais) e a fabricação de filtros para cigarros. Esta classificação não compreende o cultivo do fumo, bem como o beneficiamento inicial. A base foi fixada como a média das observações no ano de 2022. O ajuste sazonal ou dessazonalização é o processo de remoção do fator ou componente sazonal de uma série temporal econômica, já que várias são baseadas em dados mensais ou trimestrais que possuem um movimento oscilatório regular (padrão sazonal). Normalmente, este padrão é gerado por estações climáticas ou eventos, como por exemplo Natal e férias de verão levando a um aumento da demanda em determinada indústria ou comércio, ou até mesmo um aumento de preço de um produto agrícola após período de colheita. Notas: A Pesquisa Industrial Mensal Produção Física têm por objetivo acompanhar a evolução do produto real da indústria no curto prazo, sendo necessário o levantamento de informações de volume físico de produtos selecionados e representativos de diferentes atividades industriais, como das indústrias extrativas e de transformação. A pesquisa vêm sendo feita desde 1970, com informações fornecidas todos os meses, até o dia 10 de cada mês posterior ao de referência. A partir de maio de 2014, a Pesquisa Industrial Mensal Produção Física, sofre reformulação e dá-se início a divulgação da nova série de índices mensais da produção industrial, com base nas novas classificações, de atividades e produtos, usadas pelas demais pesquisas da indústria a partir de 2007, quais sejam: a Classificação Nacional de Atividades Econômicas - CNAE 2.0 e a Lista de Produtos da Indústria - PRODLIST-Indústria. Segundo a classificação da CNAE 2.0, a Produção Industrial só identifica os serviços industriais mais importantes e somente quando são exercidos sob contrato. Em 2023, a pesquisa teve uma nova atualização e que foi feita a partir do cadastro de empresas e produtos produzidos pela Pesquisa Industrial Anual (PIA-Empresa e PIA-Produto) de 2019. Nesse processo, atualiza-se o ano base da pesquisa, a cesta de produtos investigados e a estrutura de ponderação. Mais informações: CNAE 2.0 ; Lista de Produtos da Indústria ; Dicionário Brasileiro de Estatística e Guajarati, Introdução à Econometria Básica, 4ª Edição, 2004.
-- **Atualizado em:** 03/04/2024
-
-## ocupa.csv
-
-### Pessoas de 14 anos ou mais de idade, ocupadas na semana de referência no grupamento de atividade informação, comunicação e atividades financeiras, imobiliárias, profissionais e administrativas
-
-- **Frequência:** Mensal de 2012.03 até 2024.02
-- **Fonte:** Instituto Brasileiro de Geografia e Estatística, Pesquisa Nacional por Amostra de Domicílios Contínua (IBGE/PNAD Contínua)
-- **Unidade:** Pessoa (mil)
-- **Comentário:** Pessoas que, na semana de referência, trabalharam pelo menos uma hora completa em trabalho remunerado em dinheiro, produtos, mercadorias ou benefícios (moradia, alimentação, roupas, treinamento etc.), ou em trabalho sem remuneração direta em ajuda à atividade econômica de membro do domicílio ou parente que reside em outro domicílio, ou, ainda, as que tinham trabalho remunerado do qual estavam temporariamente afastadas nessa semana. Consideram-se como ocupadas temporariamente afastadas de trabalho remunerado as pessoas que não trabalharam durante pelo menos uma hora completa na semana de referência por motivo de férias, folga, jornada variável ou licença remunerada (em decorrência de maternidade, paternidade, saúde ou acidente da própria pessoa, estudo, casamento, licença-prêmio etc.). Além disso, também foram consideradas ocupadas as pessoas afastadas por motivo diferente dos já citados, desde que o período transcorrido do afastamento fosse inferior a quatro meses, contados até o último dia da semana de referência. As informações dos indicadores são divulgados a cada mês referentes ao último trimestre móvel. Mais informações: Notas metodológicas - PNAD Contínua e Glossário - PNAD Contínua - mensal.
-- **Atualizado em:** 28/03/2024
-
+Com a base de dados pronta para análise, basta executar a rotina `analysis.do` no Stata. A versão testada foi `Stata 17 MP`.
