@@ -13,18 +13,18 @@ Os autores coletaram dados sobre o número de funcionários de 331 restaurantes 
 
 Variáveis originais de interesse:
 
-12. `nj` – variável dummy igual a 1 se o restaurante estiver localizado em Nova Jersey
-13. `emptot` – o número total de pessoas empregadas no período pré-tratamento
-14. `emptot2` – o número total de pessoas empregadas no período pós-tratamento
-15. `wage_st` – variável que mede o salário inicial médio no restaurante no período pré-tratamento
-16. `wage_st2` – variável que mede o salário médio inicial no restaurante no período pós-tratamento
-17. `pmeal` – variável que mede o preço médio de uma refeição no período pré-tratamento
-18. `pmeal2` – variável que mede o preço médio de uma refeição no período pós-tratamento
-19. `co_owned` – variável dummy igual a 1 se o restaurante tivesse co-proprietário
-20. `bk` – variável dummy igual a 1 se o restaurante fosse um Burger King
-21. `kfc` – variável dummy igual a 1 se o restaurante fosse um KFC
-22. `wendys` – variável dummy igual a 1 se o restaurante fosse um Wendys
-23. `roys` - variável dummy igual a 1 se o restaurante fosse um Roys
+1. `nj` – variável dummy igual a 1 se o restaurante estiver localizado em Nova Jersey
+2. `emptot` – o número total de pessoas empregadas no período pré-tratamento
+3. `emptot2` – o número total de pessoas empregadas no período pós-tratamento
+4. `wage_st` – variável que mede o salário inicial médio no restaurante no período pré-tratamento
+5. `wage_st2` – variável que mede o salário médio inicial no restaurante no período pós-tratamento
+6. `pmeal` – variável que mede o preço médio de uma refeição no período pré-tratamento
+7. `pmeal2` – variável que mede o preço médio de uma refeição no período pós-tratamento
+8. `co_owned` – variável dummy igual a 1 se o restaurante tivesse co-proprietário
+9. `bk` – variável dummy igual a 1 se o restaurante fosse um Burger King
+10. `kfc` – variável dummy igual a 1 se o restaurante fosse um KFC
+11. `wendys` – variável dummy igual a 1 se o restaurante fosse um Wendys
+12. `roys` - variável dummy igual a 1 se o restaurante fosse um Roys
 
 Após transformação:
 
